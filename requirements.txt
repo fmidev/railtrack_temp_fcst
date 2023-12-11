@@ -1,0 +1,12 @@
+xarray
+pandas
+numpy
+eccodes
+pyproj
+fsspec
+requests
+scipy
+s3fs
+urllib3<=1.26.15
+xgboost
+joblib
