@@ -8,7 +8,7 @@ RUN dnf -y install dnf-plugins-core && \
     dnf -y module enable python38 && \
     dnf config-manager --set-enabled powertools && \
     dnf config-manager --setopt="epel.exclude=eccodes*" --save && \
-    dnf -y --setopt=install_weak_deps=False install python38-pip python38-devel eccodes git gcc ffmpeg && \
+    dnf -y --setopt=install_weak_deps=False install python38-pip python38-devel eccodes git && \
     dnf -y clean all && rm -rf /var/cache/dnf
 
 RUN git clone https://github.com/fmidev/railtrack_temp_fcst.git
