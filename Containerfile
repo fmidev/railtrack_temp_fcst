@@ -8,8 +8,6 @@ RUN dnf -y install dnf-plugins-core && \
     dnf -y module enable python38 && \
     dnf config-manager --set-enabled powertools && \
     dnf config-manager --setopt="epel.exclude=eccodes*" --save && \
-    dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm -y && \
-    dnf install --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm -y && \
     dnf -y --setopt=install_weak_deps=False install python38-pip python38-devel eccodes git gcc ffmpeg && \
     dnf -y clean all && rm -rf /var/cache/dnf
 
