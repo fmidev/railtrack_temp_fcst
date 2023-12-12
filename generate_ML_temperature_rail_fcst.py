@@ -1,7 +1,6 @@
 import argparse
 import tools as tl
 from file_utils import ReadData, WriteData
-# from plotting import plot_NWC_data_imshow_polster
 
 
 def main():
