@@ -34,8 +34,9 @@ $ git clone https://github.com/fmidev/railtrack_temp_fcst.git
 $ cd railtrack_temp_fcst/
 $ python3 -m venv venv
 $ source venv/bin/activate
-(venv) $ python3 -m pip install .
-(venv) $ python3 run_railtrack_temp.sh TODAY
+(venv) $ python3 -m pip install -r requirements.txt
+(venv) $ chmod +x run_railtrack_temp_fcst.sh
+(venv) $ ./run_railtrack_temp_fcst.sh TODAY
 ```
 Define `TODAY` as date today from current time in format `yyyymmddhhMM`.
 `hhMM` needs to be `0000` after noon and `1200` after midnight.
