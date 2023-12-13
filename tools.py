@@ -47,7 +47,7 @@ def generate_ML_forecast_domain(ds, model, data):
     for i in range(len(ds['time'].values)):
         df = select_domain_data_from_ds(ds, i)
         temp_fcst = model.predict(df)
-        rail_temp_fcst[i] = (temp_fcst.reshape(rail_temp_fcst[0].shape) - 273.15)
+        rail_temp_fcst[i] = (temp_fcst.reshape(rail_temp_fcst[0].shape))
     return rail_temp_fcst
 
 
