@@ -52,7 +52,9 @@ def generate_ML_forecast_domain(ds, model, data):
 
 
 def select_domain_data_from_ds(ds, i):
-    columns_to_select = ['lat', 'lon', 'forecast_period', 'T2', 'D2', 'SKT', 'T_925', 'WS', 'LCC', 'MCC',
+    #columns_to_select = ['lat', 'lon', 'forecast_period', 'T2', 'D2', 'SKT', 'T_925', 'WS', 'LCC', 'MCC',
+    #                     'sinhour', 'coshour', 'sinmonth', 'cosmonth', 'SRR1h', 'STR1h', 'month']
+    columns_to_select = ['forecast_period', 'T2', 'D2', 'SKT', 'T_925', 'WS', 'LCC', 'MCC',
                          'sinhour', 'coshour', 'sinmonth', 'cosmonth', 'SRR1h', 'STR1h', 'month']
     data = {col: ds[col].values[i].flatten() for col in columns_to_select}
     df = pd.DataFrame(data)

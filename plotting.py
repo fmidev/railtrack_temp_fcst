@@ -32,8 +32,8 @@ def plot_NWC_data_imshow_polster(data, outfile, title, vmin=-10, vmax=5):
     lat = data.latitudes
     fig_date = data.analysis_time
 
-    vmin = 5 * round(int(np.min(data.data) - 2) / 5)
-    vmax = 5 * round(int(np.max(data.data) + 2) / 5)
+    vmin = 5 * round(int(np.min(data.data - 273.15) - 2) / 5)
+    vmax = 5 * round(int(np.max(data.data - 273.15) + 2) / 5)
     zero_point = (abs(vmin)/(abs(vmin) + abs(vmax)))
     s_cmap = shiftedColorMap(cmap, midpoint=zero_point, name='shifted')
 
@@ -49,7 +49,7 @@ def plot_NWC_data_imshow_polster(data, outfile, title, vmin=-10, vmax=5):
                     lat_1=64.8, lat_2=64.8, lat_0=64.8, lon_0=26.0, ax=ax)
         m.drawcountries(linewidth=1.0)
         m.drawcoastlines(1.0)
-        d = data.data[i, :, :]
+        d = data.data[i, :, :] - 273.15
         d[0, 0] = vmin
         d[-1, -1] = vmax
         x, y = m(lon, lat)
