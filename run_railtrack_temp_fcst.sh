@@ -17,7 +17,7 @@ LCC=s3://trail/ec/"$START_TIME"_NL-PRCNT_0.grib2
 MCC=s3://trail/ec/"$START_TIME"_NM-PRCNT_0.grib2
 SRR=s3://trail/ec/"$START_TIME"_RNETSWA-JM2_0.grib2
 STR=s3://trail/ec/"$START_TIME"_RNETLWA-JM2_0.grib2
-ML=s3://rail-temp/xgb_random_model_corrected_radiation_params_TRail.joblib
+ML=s3://rail-temp/xgb_random_model_no_latlon_TRail.joblib
 OUTPUT="$PWD"/test_data/"$START_TIME"_railtrack_temp_fcst.grib2
 
 #Local file run
