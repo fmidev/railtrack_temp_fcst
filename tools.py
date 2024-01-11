@@ -1,13 +1,11 @@
 import numpy as np
 import xarray as xr
 import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 import fsspec
 import joblib
 from datetime import datetime as dt
-from datetime import timedelta as td
-from typing import Union
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def read_file_from_s3(data_file):
@@ -52,8 +50,6 @@ def generate_ML_forecast_domain(ds, model, data):
 
 
 def select_domain_data_from_ds(ds, i):
-    #columns_to_select = ['lat', 'lon', 'forecast_period', 'T2', 'D2', 'SKT', 'T_925', 'WS', 'LCC', 'MCC',
-    #                     'sinhour', 'coshour', 'sinmonth', 'cosmonth', 'SRR1h', 'STR1h', 'month']
     columns_to_select = ['forecast_period', 'T2', 'D2', 'SKT', 'T_925', 'WS', 'LCC', 'MCC',
                          'sinhour', 'coshour', 'sinmonth', 'cosmonth', 'SRR1h', 'STR1h', 'month']
     data = {col: ds[col].values[i].flatten() for col in columns_to_select}
@@ -131,6 +127,12 @@ def sort_by_time_series(ds: xr.Dataset) -> xr.Dataset:
 def select_only_forecast_from_df(df):
     ds = df[1:]
     return ds
+
+
+def mask_missing_data(data_object):
+    data_object.data[~np.isfinite(data_object.mask_nodata)] = np.nan
+    data_object.data[data_object.data == 9999] = np.nan
+    return data_object
 
 
 def calculate_forecast_period_dataset(times: np.array, df: xr.Dataset):
