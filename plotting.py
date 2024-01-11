@@ -19,10 +19,23 @@ def main():
 
     args = parse_command_line()
     data = ReadData(args.input_file, read_coordinates=True,  time_steps=125)
-    plot_NWC_data_imshow_polster(data, fig_out, "Railtrack temperature forecast from EC")
+    plot_NWC_data_pcolormesh_polster(data, fig_out, "Railtrack temperature forecast from EC")
 
 
-def plot_NWC_data_imshow_polster(data, outfile, title, vmin=-10, vmax=5):
+def params_data_comparison():
+    pwd = os.getcwd()
+    pwd = os.path.split(pwd)[0]
+    fig_out = f"{pwd}/rail_temperature/figures/comparison/"
+    if os.path.isdir(fig_out) is False:
+        os.mkdir(fig_out)
+
+    args = parse_command_line()
+    data = ReadData(args.input_file, read_coordinates=True,  time_steps=125)
+    comparison = ReadData(args.comparison_file, read_coordinates=True, time_steps=125)
+    plot_dataset_difference_polster(data, comparison, fig_out, "Railtrack temperature forecast from EC")
+
+
+def plot_NWC_data_pcolormesh_polster(data, outfile, title):
     """Use for plotting when projection is Polster/Polar_stereografic
 
     Only for Scandinavian domain. For other domains coordinates must be changed.
@@ -32,6 +45,7 @@ def plot_NWC_data_imshow_polster(data, outfile, title, vmin=-10, vmax=5):
     lat = data.latitudes
     fig_date = data.analysis_time
 
+    # Calculate floating zero point
     vmin = 5 * round(int(np.min(data.data - 273.15) - 2) / 5)
     vmax = 5 * round(int(np.max(data.data - 273.15) + 2) / 5)
     zero_point = (abs(vmin)/(abs(vmin) + abs(vmax)))
@@ -55,16 +69,58 @@ def plot_NWC_data_imshow_polster(data, outfile, title, vmin=-10, vmax=5):
         x, y = m(lon, lat)
 
         if i == 0:
-            # Koulutukseen käytetyt koordinaatit:
-            lat_obs = [62.39783, 61.838333, 60.90774, 63.891666, 61.28091, 61.044735,
-                       62.48737, 64.87932, 64.55291, 60.90785, 66.14115]
-            lon_obs = [30.027159, 25.111172, 27.283697, 23.854307, 23.750443, 26.73692,
-                       27.195679, 25.503368, 27.160814, 27.285547, 24.921642]
             cm = m.pcolormesh(x, y, d, cmap=s_cmap)
-            #m.scatter(lon_obs, lat_obs, zorder=1, alpha=0.8, c='k', s=56, latlon=True)
-            #m.scatter(lon_obs, lat_obs, zorder=2, alpha=0.8, c='g', s=26, latlon=True)
         else:
             cm = m.pcolormesh(x, y, d, cmap=s_cmap)
+        analysis = data.analysis_time - td(hours=int(1))
+        plt.title(f"{title} {dt.strftime(fig_date, '%Y-%m-%d %H:%M')},\n Analysistime {analysis}, forecast + {int(hour) + 1}h)")
+        plt.colorbar(cm, fraction=0.033, pad=0.04, orientation="horizontal")
+        forecast_outfile = outfile + f"{dt.strftime(data.analysis_time, '%Y%m%d%H%M')}_TRAIL_fcst+{int(hour) + 1}h.png"
+        plt.savefig(forecast_outfile, dpi=300, bbox_inches='tight', pad_inches=0.2)
+        plt.close()
+
+
+def plot_dataset_difference_polster(data, comparison, outfile, title):
+    """Use for plotting when projection is Polster/Polar_stereografic
+
+    Only for Scandinavian domain. For other domains coordinates must be changed.
+    """
+    cmap = matplotlib.cm.RdYlGn       #"coolwarm", 'RdBl_r'  'Blues' 'Jet' 'RdYlGn_r'
+    lon = data.longitudes
+    lat = data.latitudes
+    fig_date = data.analysis_time
+
+    # lasketaan erotus datoille: Punainen arvo, jos malli on pienempi kuin ilman
+    # lämpötila ja vihreä, jos korkeampi. Tän voi vaihtaa halutessaan
+    # Todo: tee joskus valmiiksi! Puuttuu vielä erotusreunat!
+
+    vmin = 5 * round(int(np.min(data.data - 273.15) - 2) / 5)
+    vmax = 5 * round(int(np.max(data.data - 273.15) + 2) / 5)
+    zero_point = (abs(vmin)/(abs(vmin) + abs(vmax)))
+    s_cmap = shiftedColorMap(cmap, midpoint=zero_point, name='shifted')
+
+    for i in range(len(data.data)):
+        hour = 0
+        fig, ax = plt.subplots(1, 1, figsize=(16, 12))
+        if i > 0:
+            hour = (data.dtime[i] - data.dtime[0]).total_seconds() / 3600
+            fig_date = data.dtime[i]
+        m = Basemap(width=970000, height=1300000,
+                    resolution='i', rsphere=(6378137.00,6356752.3142),
+                    projection='lcc', ellps='WGS84',
+                    lat_1=64.8, lat_2=64.8, lat_0=64.8, lon_0=26.0, ax=ax)
+        m.drawcountries(linewidth=1.0)
+        m.drawcoastlines(1.0)
+        d1 = data.data[i, :, :] - 273.15
+        d2 = data.data[i, :, :] - 273.15
+
+        d = d1 - d2
+        x, y = m(lon, lat)
+
+        if i == 0:
+            cm = m.pcolormesh(x, y, d, cmap=s_cmap)
+        else:
+            cm = m.pcolormesh(x, y, d, cmap=cmap)
         analysis = data.analysis_time - td(hours=int(1))
         plt.title(f"{title} {dt.strftime(fig_date, '%Y-%m-%d %H:%M')},\n Analysistime {analysis}, forecast + {int(hour) + 1}h)")
         plt.colorbar(cm, fraction=0.033, pad=0.04, orientation="horizontal")
