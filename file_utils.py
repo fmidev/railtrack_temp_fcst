@@ -20,6 +20,7 @@ class ReadData:
                  missing_data: bool = False):
         self.data_file = data_file
         self.data = None
+        self.mask_nodata = None
         self.latitudes = None
         self.longitudes = None
         self.template = None
@@ -27,6 +28,7 @@ class ReadData:
         self.forecast_time = None
         self.analysis_time = None
         self.read(added_hours, read_coordinates, use_as_template, time_steps, missing_data)
+        # Sort arrays chronologically from the oldest to the newest
         sorter = generate_sorter(self.dtime)
         self.dtime = sort_array_by_time_series(self.dtime, sorter)
         self.data = sort_array_by_time_series(self.data, sorter)
@@ -104,7 +106,7 @@ class ReadData:
             self.latitudes = self.latitudes[0, :, :]
             self.longitudes = self.longitudes[0, :, :]
 
-        mask_nodata = np.ma.masked_where(self.data == 9999, self.data)
+        self.mask_nodata = np.ma.masked_where(self.data == 9999, self.data)
         if type(dtime_ls) == list:
             self.dtime = np.array([(i+datetime.timedelta(hours=added_hours)) for i in dtime_ls])
         print("Read {} in {:.2f} seconds".format(self.data_file, time.time() - start))
@@ -116,7 +118,7 @@ class WriteData:
                  output_file: str,
                  write_option: str,
                  t_diff: int = 0,
-                 time_series = None):  #TODO: Pitää olla ehkä 1h, koska analyysiä tässä ei ole mukana
+                 time_series=None):  #TODO: Pitää olla ehkä 1h, koska analyysiä tässä ei ole mukana
         self.interpolated_data = interpolated_data
         self.t_diff = t_diff
         self.write_option = write_option
@@ -154,6 +156,11 @@ class WriteData:
         codes_set_long(self.template, "generatingProcessIdentifier", 202)
         codes_set_long(self.template, "centre", 86)
         codes_set_long(self.template, "bitmapPresent", 1)
+
+        # Specify railtrack specific metadata
+        codes_set_long(self.template, "parameterNumber", 195)
+        codes_set_long(self.template, "generatingProcessIdentifier", 240)
+
         codes_set_long(self.template, "indicatorOfUnitOfTimeRange", 0)  # minute
         codes_set_long(self.template, "stepUnits", 1)  # minute
         base_lt = datetime.timedelta(minutes=15)
