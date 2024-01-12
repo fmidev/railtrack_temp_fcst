@@ -35,7 +35,7 @@ def main():
     ML_model = tl.load_ML_model(args.ML_model)
     t_trail_fcst = tl.generate_ML_forecast_domain(ds, ML_model, data.data[1:])
     WriteData(t_trail_fcst, data_meta.template, args.output_file,
-              's3' if args.output_file.startswith('s3://') else 'local', t_diff=1,
+              's3' if args.output_file.startswith('s3://') else 'local',
               time_series=data.dtime[1:])
 
 
