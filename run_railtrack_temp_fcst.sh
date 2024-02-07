@@ -3,6 +3,7 @@
 
 PYTHON=python3
 START_TIME=$1
+OUTPUT=$2
 
 # Check if "test_data" is in project, if not, create
 mkdir -p "$PWD"/test_data
@@ -18,7 +19,6 @@ MCC=s3://trail/ec/"$START_TIME"_NM-PRCNT_0.grib2
 SRR=s3://trail/ec/"$START_TIME"_RNETSWA-JM2_0.grib2
 STR=s3://trail/ec/"$START_TIME"_RNETLWA-JM2_0.grib2
 ML=s3://rail-temp/xgb_random_model_no_latlon_TRail.joblib
-OUTPUT="$PWD"/test_data/"$START_TIME"_railtrack_temp_fcst.grib2
 
 #Local file run
 # Create needed directories and download data to your "test_data" directory. You can modify file path if needed
@@ -32,7 +32,6 @@ OUTPUT="$PWD"/test_data/"$START_TIME"_railtrack_temp_fcst.grib2
 #SRR="$PWD"/test_data/"$START_TIME"_RNETSWA-JM2_0.grib2
 #STR="$PWD"/test_data/"$START_TIME"_RNETLWA-JM2_0.grib2
 #ML=s3://rail-temp/xgb_random_model_corrected_radiation_params_TRail.joblib
-#OUTPUT="$PWD"/test_data/"$START_TIME"_interpolated_tstm.grib2
 
 #Generating 10 days forecast for railtrack temperature
 $PYTHON ./generate_ML_temperature_rail_fcst.py --T2 "$T2" --D2 "$D2" --SKT "$SKT" --T_925 "$T_925" --WS "$WS" --LCC "$LCC" --MCC "$MCC" --SRR1h "$SRR" --STR1h "$STR" --ML_model "$ML" --output_file "$OUTPUT"
