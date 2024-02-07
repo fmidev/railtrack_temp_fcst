@@ -18,5 +18,5 @@ WORKDIR /railtrack_temp_fcst
 ADD https://lake.fmi.fi/rail-temp/xgb_random_model_no_latlon_TRail.joblib /railtrack_temp_fcst
 
 RUN chmod 644 xgb_random_model_no_latlon_TRail.joblib && \
-    update-alternatives --set python3 /usr/bin/python3.8 && \
+    update-alternatives --set python3 /usr/bin/python3.9 && \
     python3 -m pip --no-cache-dir install -r requirements.txt
