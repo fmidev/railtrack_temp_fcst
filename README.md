@@ -36,12 +36,13 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 (venv) $ python3 -m pip install -r requirements.txt
 (venv) $ chmod +x run_railtrack_temp_fcst.sh
-(venv) $ ./run_railtrack_temp_fcst.sh TODAY
+(venv) $ ./run_railtrack_temp_fcst.sh TODAY OUTPUT_FILE_PATH
 ```
 Define `TODAY` as date today from current time in format `yyyymmddhhMM`.
 `hhMM` needs to be `0000` after noon and `1200` after midnight.
 
+Define `OUTPUT_FILE_PATH` as file name only with fileformat `.grib2`. For example `output_file.grib2`.
+A file will be saved to current working directory.
+
 For running script for data visualizations uncomment `lines 42 and 44` from file `run_railtrack_temp.sh`
 Add comment to `line 38`. Then produce command `(venv) $ python3 run_pot_nwc.sh TODAY`
-Visualizations works only, if railtrack temperature forecast file has been created 
-and saved to correct location
