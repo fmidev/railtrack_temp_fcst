@@ -15,6 +15,7 @@ LCC=s3://trail/ec/"$START_TIME"_NL-PRCNT_0.grib2
 MCC=s3://trail/ec/"$START_TIME"_NM-PRCNT_0.grib2
 SRR=s3://trail/ec/"$START_TIME"_RNETSWA-JM2_0.grib2
 STR=s3://trail/ec/"$START_TIME"_RNETLWA-JM2_0.grib2
+ML="$PWD"/xgb_random_model_corrected_radiation_params_TRail.joblib
 
 #Local file run
 # Create needed directories and download data to your "test_data" directory. You can modify file path if needed
