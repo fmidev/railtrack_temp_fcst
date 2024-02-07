@@ -1,7 +1,7 @@
 xarray
 pandas
 numpy
-eccodes
+eccodes<=2.33.0
 pyproj
 fsspec
 requests

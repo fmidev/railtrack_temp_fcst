@@ -8,7 +8,7 @@ RUN dnf -y install dnf-plugins-core && \
     dnf -y module enable python38 && \
     dnf config-manager --set-enabled powertools && \
     dnf config-manager --setopt="epel.exclude=eccodes*" --save && \
-    dnf -y --setopt=install_weak_deps=False install python39-pip python39-devel eccodes git && \
+    dnf -y --setopt=install_weak_deps=False install python38-pip python38-devel eccodes git && \
     dnf -y clean all && rm -rf /var/cache/dnf
 
 RUN git clone https://github.com/fmidev/railtrack_temp_fcst.git
@@ -18,5 +18,5 @@ WORKDIR /railtrack_temp_fcst
 ADD https://lake.fmi.fi/rail-temp/xgb_random_model_no_latlon_TRail.joblib /railtrack_temp_fcst
 
 RUN chmod 644 xgb_random_model_no_latlon_TRail.joblib && \
-    update-alternatives --set python3 /usr/bin/python3.9 && \
+    update-alternatives --set python3 /usr/bin/python3.8 && \
     python3 -m pip --no-cache-dir install -r requirements.txt
