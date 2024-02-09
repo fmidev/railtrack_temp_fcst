@@ -118,7 +118,7 @@ class WriteData:
                  output_file: str,
                  write_option: str,
                  t_diff: int = 0,
-                 time_series=None):  #TODO: Pitää olla ehkä 1h, koska analyysiä tässä ei ole mukana
+                 time_series=None):
         self.interpolated_data = interpolated_data
         self.t_diff = t_diff
         self.write_option = write_option
@@ -135,7 +135,7 @@ class WriteData:
                     "anon": False,
                     "key": os.environ["S3_ACCESS_KEY_ID"],
                     "secret": os.environ["S3_SECRET_ACCESS_KEY"],
-                    "client_kwargs": {"endpoint_url": "https://routines-data.lake.fmi.fi"},
+                    "client_kwargs": {"endpoint_url": "https://lake.fmi.fi"},
                 },
             )
             with openfile as fpout:
