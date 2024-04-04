@@ -193,4 +193,4 @@ class WriteData:
 
         print("")
         codes_release(self.template)
-        fp.close()
+        #fp.close()
